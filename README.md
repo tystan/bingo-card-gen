@@ -6,4 +6,6 @@ The Shiny app part is still on the to-do list but example bingo cards are in the
 ## Example randomly generated bingo card
 
 
-![`cards/naa-bingo-card-10558.png`](https://github.com/tystan/naa-bingo/blob/main/cards/naa-bingo-card-10558.png) 
+Link: [`cards/naa-bingo-card-10558.png`](https://github.com/tystan/naa-bingo/blob/main/cards/naa-bingo-card-10558.png) 
+
+![](cards/naa-bingo-card-10558.png) 
