@@ -75,6 +75,14 @@ ggsave(
 
 
 
+ggsave(
+  paste0("cards/naa-bingo-card-", seed_, ".png"),
+  height = 45,
+  width = 35,
+  units = "cm"
+)
+
+
 # ggsave(
 #   paste0("cards/naa-bingo-card-", seed_, ".png"),
 #   height = 45,
