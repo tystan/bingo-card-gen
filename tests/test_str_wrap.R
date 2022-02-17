@@ -7,7 +7,7 @@ grid_size <- 4
 n_facets <- 4
 n_items <- grid_size ^ 2 * n_facets
 rand_seed_max <- 1e5
-seed_ <- NULL
+seed_ <- 12345
 string_wrap_val <- 12
 
 
@@ -17,13 +17,22 @@ if (is.null(seed_)) {
 }
 print(seed_)
 
-item_list <- readLines(con = "data/naa-bingo-list.txt")
 
+load("tests/dict_words.RData")
 
-
-
+n_words <- length(dict_words)
+text_choices <- rep("", n_items)
 set.seed(seed_)
-rand_items <- sample(item_list, size = n_items)
+
+for (i in 1:n_items) {
+
+  n_choose <- sample(3:10, size = 1)
+  text_choices[i] <- paste(dict_words[sample(n_words, size = n_choose)], collapse = " ")
+
+}
+text_choices
+
+
 
 
 
@@ -32,14 +41,18 @@ plot_dat <-
     expand.grid(
       x = 1:grid_size,
       y = 1:grid_size,
-      card = LETTERS[1:n_facets]
+      facet = 1:n_facets
     )
+  ) %>%
+  mutate(
+    text = text_choices,
+    card = LETTERS[facet]
   )
 
 plot_dat <-
   plot_dat %>%
   mutate(
-    text = str_wrap(rand_items, string_wrap_val),
+    text = str_wrap(text, string_wrap_val),
     facet = paste("Naked & Afraid\nBingo Card ", card, sep = "")
   )
 
@@ -63,24 +76,5 @@ plot_dat %>%
     alpha = 0.2,
     label = paste("random seed = ", seed_)
   )
-
-
-
-ggsave(
-  paste0("cards/naa-bingo-card-", seed_, ".pdf"),
-  height = 45,
-  width = 35,
-  units = "cm"
-)
-
-
-
-# ggsave(
-#   paste0("cards/naa-bingo-card-", seed_, ".png"),
-#   height = 45,
-#   width = 35,
-#   units = "cm"
-# )
-
 
 
