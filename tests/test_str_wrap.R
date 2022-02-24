@@ -5,7 +5,7 @@ library("stringr")
 
 grid_size <- 4
 n_facets <- 4
-n_items <- grid_size ^ 2 * n_facets
+n_items <- grid_size^2 * n_facets
 rand_seed_max <- 1e5
 seed_ <- 12345
 string_wrap_val <- 12
@@ -25,10 +25,8 @@ text_choices <- rep("", n_items)
 set.seed(seed_)
 
 for (i in 1:n_items) {
-
   n_choose <- sample(3:10, size = 1)
   text_choices[i] <- paste(dict_words[sample(n_words, size = n_choose)], collapse = " ")
-
 }
 text_choices
 
@@ -61,7 +59,7 @@ plot_dat %>%
   ggplot(., aes(x = x, y = y, label = text)) %+%
   geom_tile(fill = "white", col = "black") %+%
   geom_text(col = "grey30", family = "serif", size = 5) %+%
-  facet_wrap(~ facet, ncol = 2) %+%
+  facet_wrap(~facet, ncol = 2) %+%
   theme_void() %+%
   theme(
     text = element_text(family = "serif"),
@@ -76,5 +74,3 @@ plot_dat %>%
     alpha = 0.2,
     label = paste("random seed = ", seed_)
   )
-
-

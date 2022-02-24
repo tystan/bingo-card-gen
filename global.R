@@ -5,7 +5,7 @@ library("stringr")
 
 grid_size <- 4
 n_facets <- 4
-n_items <- grid_size ^ 2 * n_facets
+n_items <- grid_size^2 * n_facets
 rand_seed_max <- 1e5
 seed_ <- NULL
 string_wrap_val <- 12
@@ -48,7 +48,7 @@ plot_dat %>%
   ggplot(., aes(x = x, y = y, label = text)) %+%
   geom_tile(fill = "white", col = "black") %+%
   geom_text(col = "grey30", family = "serif", size = 5) %+%
-  facet_wrap(~ facet, ncol = 2) %+%
+  facet_wrap(~facet, ncol = 2) %+%
   theme_void() %+%
   theme(
     text = element_text(family = "serif"),
@@ -81,6 +81,3 @@ ggsave(
 #   width = 35,
 #   units = "cm"
 # )
-
-
-
