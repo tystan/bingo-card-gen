@@ -2,14 +2,32 @@ library("ggplot2")
 library("dplyr")
 library("stringr")
 
+show_nms <-
+  c(
+    "Naked & Afraid",
+    "It's Always Sunny in Philadelphia",
+    "90 Day Fiance"
+  )
+which_show <- 3
+
+
+shows <- c("naa", "iasip", "90day")
+string_wrap_vals <- c(12, 15, 12)
+names(shows) <- names(string_wrap_vals) <- show_nms
+
+
+bingo_list_file <- paste0("data/", shows[which_show], "-bingo-list.txt")
+item_list <- readLines(con = bingo_list_file)
+string_wrap_val <- string_wrap_vals[which_show]
+
+
 
 grid_size <- 4
-n_facets <- 4
+(max_facet <- floor(length(item_list) / (grid_size^2)))
+n_facets <- min(4, max_facet)
 n_items <- grid_size^2 * n_facets
 rand_seed_max <- 1e5
 seed_ <- NULL
-string_wrap_val <- 12
-
 
 if (is.null(seed_)) {
   seed_ <- as.integer(.Machine$integer.max * runif(1))
@@ -17,7 +35,7 @@ if (is.null(seed_)) {
 }
 print(seed_)
 
-item_list <- readLines(con = "data/naa-bingo-list.txt")
+
 
 
 
@@ -40,9 +58,10 @@ plot_dat <-
   plot_dat %>%
   mutate(
     text = str_wrap(rand_items, string_wrap_val),
-    facet = paste("Naked & Afraid\nBingo Card ", card, sep = "")
+    facet = paste0(names(shows)[which_show], "\nBingo Card ", card, sep = "")
   )
 
+plot_dat %>% print(., n = nrow(.))
 
 plot_dat %>%
   ggplot(., aes(x = x, y = y, label = text)) %+%
@@ -64,11 +83,20 @@ plot_dat %>%
     label = paste("random seed = ", seed_)
   )
 
+out_file_nm <-
+  paste0(
+    "cards/",
+    shows[which_show],
+    "-bingo-card-",
+    sprintf("%05.0f", seed_),
+    ".pdf"
+  )
+
 
 
 ggsave(
-  paste0("cards/naa-bingo-card-", seed_, ".pdf"),
-  height = 45,
+  out_file_nm,
+  height = 5 + 20 * ceiling(n_facets / 2),
   width = 35,
   units = "cm"
 )
@@ -76,7 +104,7 @@ ggsave(
 
 
 # ggsave(
-#   paste0("cards/naa-bingo-card-", seed_, ".png"),
+#   paste0("cards/", shows[which_show], "-bingo-card-", seed_, ".png"),
 #   height = 45,
 #   width = 35,
 #   units = "cm"
