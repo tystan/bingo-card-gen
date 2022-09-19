@@ -25,12 +25,7 @@ show_nms <-
 string_wrap_vals <- c(12, 15, 12, 12)
 names(shows) <- names(string_wrap_vals) <- show_nms
 
-grid_size <- 4
-(max_facet <- floor(length(item_list) / (grid_size^2)))
-n_facets <- min(4, max_facet)
-n_items <- grid_size^2 * n_facets
-
-
+# grid_size <- 4
 
 
 # ---- funcs ----
@@ -52,16 +47,19 @@ get_seed <- function() {
 
 
 
-get_plot_data <- function(show_i, seed_) {
+get_plot_data <- function(show_i, grid_size, seed_) {
 
-  which_show <- which(show_nms %in% show_i) # shows
-  print(show_i)
-  print(which_show)
+  which_show <- which(show_nms %in% show_i) # shows %in% show_i
+  # print(show_i)
+  # print(which_show)
 
   bingo_list_file <- paste0("data/", shows[which_show], "-bingo-list.txt")
   item_list <- readLines(con = bingo_list_file)
   string_wrap_val <- string_wrap_vals[which_show]
 
+  (max_facet <- floor(length(item_list) / (grid_size^2)))
+  n_facets <- min(2, max_facet) # min(4, max_facet)
+  n_items <- grid_size^2 * n_facets
 
   set.seed(seed_)
   rand_items <- sample(item_list, size = n_items)
@@ -83,7 +81,7 @@ get_plot_data <- function(show_i, seed_) {
       facet = paste0(names(shows)[which_show], "\nBingo Card ", card, sep = "")
     )
 
-  plot_dat # %>% print(., n = nrow(.))
+  plot_dat
 
 }
 
@@ -92,6 +90,7 @@ get_plot_data <- function(show_i, seed_) {
 plot_card <- function(plot_dat) {
 
   this_seed <- unique(plot_dat[["this_seed"]])
+  x_max <- max(plot_dat[["x"]])
 
   plot_dat %>%
     ggplot(., aes(x = x, y = y, label = text)) %+%
@@ -107,7 +106,7 @@ plot_card <- function(plot_dat) {
     ) %+%
     annotate(
       geom = "text",
-      x = 4.02,
+      x = x_max + 0.02,
       y = 0.42,
       alpha = 0.2,
       label = paste("random seed = ", this_seed)

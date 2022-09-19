@@ -7,12 +7,16 @@ shinyServer(function(input, output, session) {
     input$show_input
   })
 
+  grid_select <- reactive({
+    as.integer(substr(input$grid_size, 1, 1))
+  })
+
 
   output$plot1 <- renderPlot({
 
     input$rgen
 
-    plot_dat <- get_plot_data(show_select(), get_seed())
+    plot_dat <- get_plot_data(show_select(), grid_select(), get_seed())
     plot_card(plot_dat)
 
   })
@@ -24,9 +28,9 @@ shinyServer(function(input, output, session) {
   # ---- close_app_action ----
 
   # Close the R session when browser closes
-  session$onSessionEnded(function() {
-    stopApp()
-  })
+  # session$onSessionEnded(function() {
+  #   stopApp()
+  # })
 
 
 
